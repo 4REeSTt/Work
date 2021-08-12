@@ -1,10 +1,11 @@
 #include <iostream>
 
 void merge(int* A, int p, int q, int r){
-    int A_tmp[r]{0}; 
-    int index = 0;
-    int left = 0;
+    p--;
+    int A_tmp[r-p];
+    int left = p;
     int right = q;
+    int index = 0;
 
     while(left < q && right < r){
         if(A[left] < A[right])
@@ -20,8 +21,12 @@ void merge(int* A, int p, int q, int r){
         for(int i = left; i < q; i++)
             A_tmp[index++] = A[i];
 
-    for(int j = 0; j < r; j++)
-        A[j] = A_tmp[j];
+    for(int i = p; i < r; i++){
+        for(int j = 0; j < r-p; j++){
+            A[i++] = A_tmp[j];
+        }
+        break;
+    }
 }
 
 void sort(int* A, int p, int r){
@@ -37,10 +42,14 @@ void sort(int* A, int p, int r){
 int main(){
     int length = 8;
     int A[length]{5,2,4,6,1,3,2,6};
+
+    //for(int i = 0; i < length; i++){
+    //    A[i] = length - i;
+    //}
     sort(A,1,length);
     
     for(int i = 0; i < length; i++)
-        std::cout << A[i] << " ";
+       std::cout << A[i] << " ";
 
 
     return 0;

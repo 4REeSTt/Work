@@ -1,4 +1,4 @@
-#pragma warning(disable : 4996)
+#pragma warning(disable : 4996) //turns off scanf_s  warning for VS 2019
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>

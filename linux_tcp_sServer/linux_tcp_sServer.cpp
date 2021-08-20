@@ -63,7 +63,7 @@ int main(){
         inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
         std::cout << host << " connected on " << ntohs(client.sin_port) << std::endl;
     }
-    //While receving - display message, echo message, log message
+    //While receving -  log message
     char buff[4096];
     while(true){
 
@@ -83,7 +83,6 @@ int main(){
         fout.open("log.txt", std::ios::app);
         time_t now = time(0);
         fout << ctime(&now) << " " << ntohs(client.sin_port) << " " <<std::string(buff, 0, bytesRecv) << std::endl;
-        //std::cout << "Received: " << std::string(buff, 0, bytesRecv) << std::endl;
         fout.close();
         
 

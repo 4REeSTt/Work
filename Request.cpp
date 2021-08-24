@@ -9,7 +9,7 @@
 //Global Vars
 
 bool END_OF_PROGRAM = 0;
-const int NumberOfThreads = 2;
+const int NumberOfThreads = 1;
 
 class Request;
 //Imitating incoming requests
@@ -60,24 +60,25 @@ void ProcessRequest(Request* request) throw() {
 
 
 //Aditional threads
-void WorkinkThread(std::vector<Request*>* request_list) {
+void WorkinkThread(std::vector<Request*> &request_list) {
 
-    //Get requests and run them using ProcessRequest
+
+    //get requests and run them using processrequest
     while (!END_OF_PROGRAM) {
 
         //Get request from list
         request_list_access.lock();
 
-        if (request_list->size() <= current_request) {
+        if (request_list.size() <= current_request) {
             request_list_access.unlock();
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             continue;
         }
-        Request* request = (*request_list)[current_request++];
+        Request* request = request_list[current_request++];
 
         request_list_access.unlock();
 
-        //ProcessRequest(request);     
+        //processrequest(request);     
         ProcessRequest(request);
     }
 }
@@ -99,8 +100,9 @@ int main()
     std::vector<Request*> request_list;
 
     for (int thread = 0; thread < NumberOfThreads; thread++)
-        thread_list[thread] = new std::thread([&]() { WorkinkThread(&request_list); });
+        thread_list[thread] = new std::thread(WorkinkThread, std::ref(request_list));
 
+    
     //2.Класть в очередь функции для выполнения пока GetRequest() не вернет nullptr
     //Можно установить другое условие завершения основного цикла если планируется пополнение incomming_requests(в условии не указано)
     while (true) {
@@ -111,11 +113,11 @@ int main()
         request_list.push_back(current_request);
     }
 
-
     //Just for exaple(shows that threads're running and quitting correct)
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     END_OF_PROGRAM = 1;
 
+    request_list[0]->Run();
     //3.Дождаться выполнения текущего ProcessRequest потоками. Остановить рабочие потоки/удалить.
     for (int thread = 0; thread < NumberOfThreads; thread++) {
         thread_list[thread]->join();

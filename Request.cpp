@@ -61,8 +61,6 @@ void ProcessRequest(Request* request) throw() {
 
 //Aditional threads
 void WorkinkThread(std::vector<Request*> &request_list) {
-
-
     //get requests and run them using processrequest
     while (!END_OF_PROGRAM) {
 

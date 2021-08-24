@@ -9,7 +9,7 @@
 //Global Vars
 
 bool END_OF_PROGRAM = 0;
-const int NumberOfThreads = 1;
+const int NumberOfThreads = 2;
 
 class Request;
 //Imitating incoming requests

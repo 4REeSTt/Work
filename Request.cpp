@@ -6,10 +6,12 @@
 #include <vector>
 
 
+
+
 //Global Vars
 
 bool END_OF_PROGRAM = 0;
-const int NumberOfThreads = 1;
+const int NumberOfThreads = 2;
 
 class Request;
 //Imitating incoming requests
@@ -87,7 +89,7 @@ void WorkinkThread(std::vector<Request*> &request_list) {
 
 //Feeling incomming_list with new requests
 void init() {
-    for (int req = 0; req < 50; req++)
+    for (int req = 0; req < 30; req++)
         incomming_list.push_back(new Request(req));
 }
 
@@ -117,12 +119,12 @@ int main()
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     END_OF_PROGRAM = 1;
 
-    request_list[0]->Run();
     //3.Дождаться выполнения текущего ProcessRequest потоками. Остановить рабочие потоки/удалить.
     for (int thread = 0; thread < NumberOfThreads; thread++) {
         thread_list[thread]->join();
         delete thread_list[thread];
     }
+
 
     //4.Quit. Memory clearing
     for (auto request : request_list)

@@ -106,12 +106,14 @@ int main()
     //2.Класть в очередь функции для выполнения пока GetRequest() не вернет nullptr
     //Можно установить другое условие завершения основного цикла если планируется пополнение incomming_requests(в условии не указано)
     while (true) {
+        request_list_access.lock();
         Request* current_request = GetRequest();
         if (current_request == nullptr) 
             break;
 
         request_list.push_back(current_request);
     }
+    request_list_access.unlock();
 
     //Just for exaple(shows that threads're running and quitting correct)
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
